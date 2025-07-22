@@ -88,7 +88,8 @@
     <button type="button" onclick="calculateMBTI()">결과 보기</button>
   </form>
 
-  <div id="result"></div>
+<div id="result"></div>
+<div id="characterImage" style="text-align: center; margin-top: 1rem;"></div>
 
 <script>
   function calculateMBTI() {
@@ -131,9 +132,17 @@
     };
 
     const resultChar = characterMap[mbti] || "알 수 없음";
-
     document.getElementById("result").textContent =
       `당신의 DJMAX 성향은 ${mbti}입니다! 어울리는 캐릭터는 "${resultChar}"입니다.`;
+
+    // 이미지 출력
+    const imageContainer = document.getElementById("characterImage");
+    if (resultChar === "알 수 없음") {
+      imageContainer.innerHTML = "";
+    } else {
+      const imageFileName = resultChar + ".png"; // 예: 엔비레인저.png
+      imageContainer.innerHTML = `<img src="${imageFileName}" alt="${resultChar}" style="max-width: 100%; height: auto;">`;
+    }
   }
 </script>
 </body>
