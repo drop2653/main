@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DJMAX 성향 검사</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    input[type="range"] {
+      width: 100%;
+    }
+    #result {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: bold;
+      margin-top: 2rem;
+    }
+    button {
+      display: block;
+      margin: 30px auto 0;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <h1>DJMAX 성향 검사 (어울리는 캐릭터)</h1>
+
+  <form id="mbtiForm">
+    <div class="question">
+      <label for="q1">1. 어려운 패턴을 치면 즐겁다.</label>
+      <input type="range" id="q1" name="EI" min="0" max="5" value="2">
+    </div>
+    <div class="question">
+      <label for="q2">2. 노트를 완벽히 정확하게 칠 때 즐겁다.</label>
+      <input type="range" id="q2" name="EI" min="0" max="5" value="2" data-reverse="true">
+    </div>
+    <div class="question">
+      <label for="q3">3. 합리적인 패턴이 들어갔으면 좋겠다.</label>
+      <input type="range" id="q3" name="SN" min="0" max="5" value="2">
+    </div>
+    <div class="question">
+      <label for="q4">4. 음악과 패턴이 잘 어울렸으면 좋겠다.</label>
+      <input type="range" id="q4" name="SN" min="0" max="5" value="2" data-reverse="true">
+    </div>
+    <div class="question">
+      <label for="q5">5. 곡을 분석하는 방식으로 게임한다.</label>
+      <input type="range" id="q5" name="TF" min="0" max="5" value="2">
+    </div>
+    <div class="question">
+      <label for="q6">6. 패턴을 육감으로 익히는 방식으로 게임한다.</label>
+      <input type="range" id="q6" name="TF" min="0" max="5" value="2" data-reverse="true">
+    </div>
+    <div class="question">
+      <label for="q7">7. 기록 갱신이 무엇보다 기분 좋다.</label>
+      <input type="range" id="q7" name="JP" min="0" max="5" value="2">
+    </div>
+    <div class="question">
+      <label for="q8">8. 기록 갱신을 못해도 안되던게 되면 좋다.</label>
+      <input type="range" id="q8" name="JP" min="0" max="5" value="2" data-reverse="true">
+    </div>
+
+    <button type="button" onclick="calculateMBTI()">결과 보기</button>
+  </form>
+
+  <div id="result"></div>
+
+<script>
+  function calculateMBTI() {
+    const form = document.getElementById("mbtiForm");
+    const inputs = form.querySelectorAll("input[type='range']");
+    const scores = { EI: 0, SN: 0, TF: 0, JP: 0 };
+
+    inputs.forEach((input) => {
+      const type = input.name;
+      const value = parseInt(input.value);
+      const reverse = input.dataset.reverse === "true";
+      const adjusted = reverse ? 5 - value : value;
+      scores[type] += adjusted;
+    });
+
+    const mbti = [
+      scores.EI >= 6 ? "혼" : "판",
+      scores.SN >= 6 ? "안" : "감",
+      scores.TF >= 6 ? "분" : "육",
+      scores.JP >= 6 ? "성" : "실",
+    ].join("");
+
+    const characterMap = {
+      "혼안분성": "엔비레인저",
+      "판안분성": "클리어",
+      "혼감분성": "리룰르",
+      "혼안육성": "프레이야와 카밀리아",
+      "혼안분실": "다인의 사역마",
+      "판감분성": "세라와 니나",
+      "판안육성": "가야",
+      "판안분실": "에라",
+      "혼감육성": "플레이",
+      "혼감분실": "로페",
+      "혼안육실": "다인",
+      "판감육성": "레나",
+      "판안육실": "안이영",
+      "판감분실": "달리",
+      "혼감육실": "페일",
+      "판감육실": "추장님",
+    };
+
+    const resultChar = characterMap[mbti] || "알 수 없음";
+
+    document.getElementById("result").textContent =
+      `당신의 DJMAX 성향은 ${mbti}입니다! 어울리는 캐릭터는 "${resultChar}"입니다.`;
+  }
+</script>
+</body>
+</html>
